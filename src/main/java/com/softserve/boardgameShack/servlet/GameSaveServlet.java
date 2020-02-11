@@ -3,6 +3,8 @@ package com.softserve.boardgameShack.servlet;
 import com.softserve.boardgameShack.entity.Game;
 import com.softserve.boardgameShack.service.GameService;
 import com.softserve.boardgameShack.service.GameServiceImpl;
+import com.softserve.boardgameShack.service.PublishingHouseService;
+import com.softserve.boardgameShack.service.PublishingHouseServiceImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,6 +18,7 @@ import java.io.IOException;
 public class GameSaveServlet extends HttpServlet {
 
     private GameService gameService = new GameServiceImpl();
+    private PublishingHouseService publishingHouseService = new PublishingHouseServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -33,7 +36,9 @@ public class GameSaveServlet extends HttpServlet {
         game.setPlayerNumber(req.getParameter("playerNumber"));
         game.setDescription(req.getParameter("description"));
         game.setLanguage(req.getParameter("language"));
-        gameService.add(game);
+        String publishingHouse = req.getParameter("publishingHouse");
+
+        gameService.add(game, publishingHouse);
         resp.sendRedirect("/homepage");
     }
 }

@@ -14,7 +14,7 @@ public class LoginDaoimpl implements LoginDao{
     private static final String CHECK_LOGIN = "select * from users where name = ? and password = ?";
 
     @Override
-    public boolean validate(String name, String password) {
+    public boolean checkUserProperties(String name, String password) {
         boolean status = false;
         try (Connection connection = ConnectionFactory.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(CHECK_LOGIN)){

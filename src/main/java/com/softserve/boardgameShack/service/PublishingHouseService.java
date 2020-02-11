@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface PublishingHouseService {
 
-    List<PublishingHouse> getByName(String name);
+    PublishingHouse getByName(String name);
 
     List<PublishingHouse> getAll();
 

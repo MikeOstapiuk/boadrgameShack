@@ -10,5 +10,5 @@ public interface UserService {
 
     List<User> getAll();
 
-    void add (User model);
+    void add (User model, String repeatPassword);
 }

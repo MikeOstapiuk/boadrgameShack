@@ -4,8 +4,6 @@ import java.util.List;
 
 public interface GenericDao <T> {
 
-    List<T> getByName(String name);
-
     T getById(long id);
 
     List<T> getAll ();

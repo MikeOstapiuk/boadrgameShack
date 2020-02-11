@@ -24,10 +24,10 @@ public class AdminAuthenticationFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         HttpServletResponse resp = (HttpServletResponse) servletResponse;
 
-        HttpSession session = req.getSession(false);
+        HttpSession session = req.getSession();
         User user = (User)session.getAttribute("user");
 
-        if (session == null || user == null){
+        if (user == null){
             resp.sendRedirect("/loginForm");
         } else if(user.getUserRole() == (UserRole.ADMIN)) {
             filterChain.doFilter(servletRequest, servletResponse);

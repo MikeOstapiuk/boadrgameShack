@@ -35,6 +35,10 @@
             <td>Language:</td>
             <td><input type="text" value = "${game.language}" name="language"></td>
         </tr>
+        <tr>
+            <td>Publishing house:</td>
+            <td><input type="text" value = "${game.publishingHouse.name}" name="publishingHouse"></td>
+        </tr>
         <input type="hidden" name="id" value="${game.id}">
         <tr>
             <td></td>

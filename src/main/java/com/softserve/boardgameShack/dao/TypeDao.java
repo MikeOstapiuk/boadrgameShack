@@ -1,6 +1,5 @@
 package com.softserve.boardgameShack.dao;
 
-import com.softserve.boardgameShack.entity.PublishingHouse;
 import com.softserve.boardgameShack.entity.Type;
 import org.apache.log4j.Logger;
 
@@ -9,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TypeDao implements GenericDao<Type> {
-    private static Logger logger = Logger.getLogger(GameDao.class.getName());
+    private static Logger logger = Logger.getLogger(TypeDao.class.getName());
 
     private static final String GET_BY_NAME = "select * from types where name = ?";
     private static final String GET_BY_ID = "select * from types where id = ?";
@@ -18,7 +17,6 @@ public class TypeDao implements GenericDao<Type> {
     private static final String UPDATE_TYPE = "update types set name = ? where id = ?";
     private static final String DELETE_TYPE = "delete from types where id = ?";
 
-    @Override
     public List<Type> getByName(String name) {
         List<Type> types = new ArrayList<>();
         try (Connection connection = ConnectionFactory.getConnection();
@@ -47,11 +45,12 @@ public class TypeDao implements GenericDao<Type> {
 
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
 
-            type.setId(Long.valueOf(resultSet.getString(1)));
-            type.setName(resultSet.getString(2));
-
+            if(resultSet.next()) {
+                type = new Type();
+                type.setId(Long.valueOf(resultSet.getString(1)));
+                type.setName(resultSet.getString(2));
+            }
         }catch (SQLException e) {
             logger.error("Issue with getting type from database");
             e.printStackTrace();
@@ -70,6 +69,7 @@ public class TypeDao implements GenericDao<Type> {
 
             while (resultSet.next()) {
                 Type type = new Type();
+                type.setId(1);
                 type.setName(resultSet.getString(2));
                 types.add(type);
             }

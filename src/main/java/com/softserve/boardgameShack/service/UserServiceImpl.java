@@ -2,12 +2,18 @@ package com.softserve.boardgameShack.service;
 
 import com.softserve.boardgameShack.dao.UserDao;
 import com.softserve.boardgameShack.entity.User;
+import com.softserve.boardgameShack.service.validator.EmailValidator;
+import com.softserve.boardgameShack.service.validator.PasswordValidator;
+import com.softserve.boardgameShack.service.validator.UsernameValidator;
 
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
 
     private UserDao dao = new UserDao();
+    private EmailValidator emailValidator = new EmailValidator();
+    private PasswordValidator passwordValidator = new PasswordValidator();
+    private UsernameValidator usernameValidator = new UsernameValidator();
 
     @Override
     public List<User> getByName(String name) {
@@ -20,7 +26,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void add(User model) {
+    public void add(User model, String repeatPassword) throws IllegalArgumentException {
+        passwordValidator.isExist(model.getPassword());
+        passwordValidator.validate(model.getPassword(), repeatPassword);
+        usernameValidator.validate(model.getName());
+        emailValidator.isExist(model.getEmail());
+        emailValidator.validate(model.getEmail());
         dao.add(model);
     }
 }

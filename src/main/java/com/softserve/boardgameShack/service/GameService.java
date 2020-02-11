@@ -1,6 +1,7 @@
 package com.softserve.boardgameShack.service;
 
 import com.softserve.boardgameShack.entity.Game;
+import com.softserve.boardgameShack.entity.PublishingHouse;
 
 import java.util.List;
 
@@ -14,9 +15,9 @@ public interface GameService {
 
     List<Game> getAll();
 
-    void add (Game model);
+    void add (Game model, String houseName);
 
-    void update (Game model);
+    void update (Game model, String houseName);
 
     void delete (Game model);
 }

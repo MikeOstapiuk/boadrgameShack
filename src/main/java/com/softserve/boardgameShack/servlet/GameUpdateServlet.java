@@ -35,7 +35,9 @@ public class GameUpdateServlet extends HttpServlet {
         game.setPlayerNumber(req.getParameter("playerNumber"));
         game.setDescription(req.getParameter("description"));
         game.setLanguage(req.getParameter("language"));
-        gameService.update(game);
+        String publishingHouse = req.getParameter("publishingHouse");
+
+        gameService.update(game, publishingHouse);
         resp.sendRedirect("/homepage");
     }
 }

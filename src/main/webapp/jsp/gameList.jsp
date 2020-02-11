@@ -17,6 +17,8 @@
         <th>Time to play</th>
         <th>Players</th>
         <th>Description</th>
+        <th>Language</th>
+        <th>Publishing house</th>
     </tr>
     <c:forEach var="game" items="${games}">
         <tr>
@@ -29,6 +31,8 @@
             <td>${game.timeToPlay}</td>
             <td>${game.playerNumber}</td>
             <td>${game.description}</td>
+            <td>${game.language}</td>
+            <td>${game.publishingHouse.name}</td>
             <td>
                 <form action="/admin/gameUpdate" method="get">
                     <input type="hidden" name="id" value="${game.id}">

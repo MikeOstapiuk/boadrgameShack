@@ -90,6 +90,21 @@ public class Game {
         return publishingHouse;
     }
 
+    @Override
+    public String toString() {
+        return "Game{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", timeToPlay='" + timeToPlay + '\'' +
+                ", playerNumber='" + playerNumber + '\'' +
+                ", rating=" + rating +
+                ", description='" + description + '\'' +
+                ", language='" + language + '\'' +
+                ", publishingHouse=" + publishingHouse +
+                '}';
+    }
+
     public void setPublishingHouse(PublishingHouse publishingHouse) {
         this.publishingHouse = publishingHouse;
     }

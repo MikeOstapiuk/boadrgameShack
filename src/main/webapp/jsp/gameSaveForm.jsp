@@ -36,6 +36,10 @@
         <td><input type="text" name="language"></td>
     </tr>
     <tr>
+        <td>Publishing house:</td>
+        <td><input type="text" name="publishingHouse"></td>
+    </tr>
+    <tr>
         <td></td>
         <td><input type="submit" value="Submit"></td>
     </tr>

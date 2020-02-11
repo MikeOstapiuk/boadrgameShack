@@ -10,8 +10,12 @@ public class PublishingHouseServiceImpl implements PublishingHouseService{
     private PublishingHouseDao dao = new PublishingHouseDao();
 
     @Override
-    public List<PublishingHouse> getByName(String name) {
-        return dao.getByName(name);
+    public PublishingHouse getByName(String name) {
+        List<PublishingHouse> publishingHouseList = dao.getByName(name);
+        if (publishingHouseList.size() == 0){
+            throw new IllegalArgumentException("No publishing house with such name exists");
+        }
+        return publishingHouseList.get(0);
     }
 
     @Override

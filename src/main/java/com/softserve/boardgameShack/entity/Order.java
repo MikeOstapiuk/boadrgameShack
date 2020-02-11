@@ -11,7 +11,7 @@ public class Order {
 
     private String orderDetails;
 
-    private List<Game> games;
+    private Game game;
 
     private User user;
 
@@ -42,12 +42,12 @@ public class Order {
         this.orderDetails = orderDetails;
     }
 
-    public List<Game> getGames() {
-        return games;
+    public Game getGame() {
+        return game;
     }
 
-    public void setGames(List<Game> games) {
-        this.games = games;
+    public void setGame(Game game) {
+        this.game = game;
     }
 
     public User getUser() {
@@ -56,5 +56,16 @@ public class Order {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", dateTime=" + dateTime +
+                ", orderDetails='" + orderDetails + '\'' +
+                ", games=" + game +
+                ", user=" + user +
+                '}';
     }
 }

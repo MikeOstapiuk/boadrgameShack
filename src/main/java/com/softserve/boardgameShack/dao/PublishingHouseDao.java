@@ -9,7 +9,7 @@ import java.util.List;
 
 public class PublishingHouseDao implements GenericDao<PublishingHouse> {
 
-    private static Logger logger = Logger.getLogger(GameDao.class.getName());
+    private static Logger logger = Logger.getLogger(PublishingHouseDao.class.getName());
 
     private static final String GET_BY_NAME = "select * from publishing_houses where name = ?";
     private static final String GET_BY_ID = "select * from publishing_houses where id = ?";
@@ -18,7 +18,6 @@ public class PublishingHouseDao implements GenericDao<PublishingHouse> {
     private static final String UPDATE_PH = "update publishing_houses set name = ? where id = ?";
     private static final String DELETE_PH = "delete from publishing_houses where id = ?";
 
-    @Override
     public List<PublishingHouse> getByName(String name) {
         List<PublishingHouse> publishingHouses = new ArrayList<>();
         try (Connection connection = ConnectionFactory.getConnection();
@@ -29,6 +28,7 @@ public class PublishingHouseDao implements GenericDao<PublishingHouse> {
 
             while (resultSet.next()) {
                 PublishingHouse house = new PublishingHouse();
+                house.setId(resultSet.getLong(1));
                 house.setName(resultSet.getString(2));
                 publishingHouses.add(house);
             }
@@ -47,10 +47,11 @@ public class PublishingHouseDao implements GenericDao<PublishingHouse> {
 
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-
-            house.setId(Long.valueOf(resultSet.getString(1)));
-            house.setName(resultSet.getString(2));
+            if(resultSet.next()){
+                house = new PublishingHouse();
+                house.setId(resultSet.getLong(1));
+                house.setName(resultSet.getString(2));
+            }
 
         }catch (SQLException e) {
             logger.error("Issue with getting publishing house from database");
