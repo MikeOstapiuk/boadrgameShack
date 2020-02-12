@@ -1,5 +1,7 @@
 package com.softserve.boardgameShack.entity;
 
+import java.util.List;
+
 public class Game {
 
     private long id;
@@ -19,6 +21,10 @@ public class Game {
     private String language;
 
     private PublishingHouse publishingHouse;
+
+    private List<Category> categories;
+
+    private String image;
 
     public Game() {}
 
@@ -90,6 +96,26 @@ public class Game {
         return publishingHouse;
     }
 
+    public void setPublishingHouse(PublishingHouse publishingHouse) {
+        this.publishingHouse = publishingHouse;
+    }
+
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     @Override
     public String toString() {
         return "Game{" +
@@ -103,9 +129,5 @@ public class Game {
                 ", language='" + language + '\'' +
                 ", publishingHouse=" + publishingHouse +
                 '}';
-    }
-
-    public void setPublishingHouse(PublishingHouse publishingHouse) {
-        this.publishingHouse = publishingHouse;
     }
 }

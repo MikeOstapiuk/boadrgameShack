@@ -21,9 +21,9 @@ public class OrderDao implements GenericDao<Order>{
     private static final String GET_ALL = "select * from orders";
     private static final String ADD_ORDER = "insert into orders (datetime, order_details, game_id, user_id) " +
             "values (?, ?, ?, ?)";
-    private static final String UPDATE_ORDER = "update orders set datetime = ?, order_details = ?, game_id = ?, " +
-            "user_id = ? where id = ?";
-    private static final String DELETE_ORDER = "delete from orders where id = ?";
+//    private static final String UPDATE_ORDER = "update orders set datetime = ?, order_details = ?, game_id = ?, " +
+//            "user_id = ? where id = ?";
+//    private static final String DELETE_ORDER = "delete from orders where id = ?";
 
     @Override
     public Order getById(long id) {
@@ -78,33 +78,35 @@ public class OrderDao implements GenericDao<Order>{
 
     @Override
     public void update(Order model) {
-        try (Connection connection = ConnectionFactory.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ORDER)) {
-
-            convertToStatement(model, preparedStatement);
-            preparedStatement.setLong(5, model.getId());
-
-            preparedStatement.execute();
-
-        } catch (SQLException e) {
-            logger.error("Issue with updating order");
-            e.printStackTrace();
-        }
+//        try (Connection connection = ConnectionFactory.getConnection();
+//             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ORDER)) {
+//
+//            convertToStatement(model, preparedStatement);
+//            preparedStatement.setLong(5, model.getId());
+//
+//            preparedStatement.execute();
+//
+//        } catch (SQLException e) {
+//            logger.error("Issue with updating order");
+//            e.printStackTrace();
+//        }
+        throw new UnsupportedOperationException("Update operation for order does not support");
     }
 
     @Override
     public void delete(Order model) {
-        try (Connection connection = ConnectionFactory.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_ORDER)){
-
-            preparedStatement.setLong(1, model.getId());
-
-            preparedStatement.execute();
-
-        }catch (SQLException e){
-            logger.error("Issue with deleting order from database");
-            e.printStackTrace();
-        }
+//        try (Connection connection = ConnectionFactory.getConnection();
+//             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_ORDER)){
+//
+//            preparedStatement.setLong(1, model.getId());
+//
+//            preparedStatement.execute();
+//
+//        }catch (SQLException e){
+//            logger.error("Issue with deleting order from database");
+//            e.printStackTrace();
+//        }
+        throw new UnsupportedOperationException("Delete operation for order does not support");
     }
 
     private Order convertToModel(ResultSet resultSet) throws SQLException {

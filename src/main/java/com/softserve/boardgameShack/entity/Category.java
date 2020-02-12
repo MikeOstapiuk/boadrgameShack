@@ -1,12 +1,12 @@
 package com.softserve.boardgameShack.entity;
 
-public class Type {
+public class Category {
 
     private long id;
 
     private String name;
 
-    public Type() {
+    public Category() {
     }
 
     public long getId() {
@@ -27,7 +27,7 @@ public class Type {
 
     @Override
     public String toString() {
-        return "Type{" +
+        return "Category{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';

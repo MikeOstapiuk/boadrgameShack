@@ -27,10 +27,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void add(User model, String repeatPassword) throws IllegalArgumentException {
-        passwordValidator.isExist(model.getPassword());
+        passwordValidator.exists(model.getPassword());
         passwordValidator.validate(model.getPassword(), repeatPassword);
         usernameValidator.validate(model.getName());
-        emailValidator.isExist(model.getEmail());
+        emailValidator.exists(model.getEmail());
         emailValidator.validate(model.getEmail());
         dao.add(model);
     }

@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 @WebServlet("/admin/gameUpdate")
 public class GameUpdateServlet extends HttpServlet {
@@ -36,8 +38,10 @@ public class GameUpdateServlet extends HttpServlet {
         game.setDescription(req.getParameter("description"));
         game.setLanguage(req.getParameter("language"));
         String publishingHouse = req.getParameter("publishingHouse");
+        String[] categoryArray = req.getParameterValues("categoryArray");
+        List<String> categoryNames = Arrays.asList(categoryArray);
 
-        gameService.update(game, publishingHouse);
+        gameService.update(game, publishingHouse, categoryNames);
         resp.sendRedirect("/homepage");
     }
 }

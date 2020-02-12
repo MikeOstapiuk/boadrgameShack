@@ -13,6 +13,7 @@
 <table border="2">
     <tr>
         <th>Game</th>
+        <td>Image</td>
         <th>Price</th>
         <th>Time to play</th>
         <th>Players</th>
@@ -27,6 +28,7 @@
                         ${game.name}
                 </a>
             </td>
+            <td><img src="${game.image}" alt = "${game.name}"></td>
             <td>${game.price}</td>
             <td>${game.timeToPlay}</td>
             <td>${game.playerNumber}</td>
@@ -41,7 +43,7 @@
                 <form action="/admin/gameDelete" method="get">
                 <input type="hidden" name="id" value="${game.id}">
                 <input type="submit" value="Delete">
-            </form>
+                </form>
             </td>
         </tr>
     </c:forEach>

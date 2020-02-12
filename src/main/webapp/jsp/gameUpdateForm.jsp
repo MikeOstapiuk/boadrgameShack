@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@taglib prefix="myTags" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <html>
 <myTags:toHompage/>
@@ -38,6 +39,13 @@
         <tr>
             <td>Publishing house:</td>
             <td><input type="text" value = "${game.publishingHouse.name}" name="publishingHouse"></td>
+        </tr>
+        <tr>
+            <td>Categories:</td>
+            <c:forEach var = "category" items = "${categories}">
+                <td><input type="checkbox" name="categoryArray" value="${category.name}"></td>
+                <td>${category.name}</td><br>
+            </c:forEach>
         </tr>
         <input type="hidden" name="id" value="${game.id}">
         <tr>

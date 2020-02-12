@@ -1,5 +1,6 @@
 package com.softserve.boardgameShack.dao;
 
+import com.softserve.boardgameShack.entity.Category;
 import com.softserve.boardgameShack.entity.Game;
 import com.softserve.boardgameShack.entity.PublishingHouse;
 import org.apache.log4j.Logger;
@@ -13,16 +14,20 @@ public class GameDao implements GenericDao <Game> {
     private static Logger logger = Logger.getLogger(GameDao.class.getName());
 
     private PublishingHouseDao publishingHouseDao = new PublishingHouseDao();
+    private CategoryDao categoryDao = new CategoryDao();
 
     private static final String GET_BY_NAME = "select * from games where name = ?";
     private static final String GET_BY_NAME_WILDCARD = "select * from games where name like ?";
     private static final String GET_BY_ID = "select * from games where id = ?";
     private static final String GET_ALL = "select * from games";
     private static final String CREATE_GAME = "insert into games (name, price, time_to_play, player_number," +
-            " rating, description, language, publishing_house_id) values (?, ?, ?, ?, ?, ?, ?, ?)";
+            " rating, description, language, publishing_house_id, image) values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String UPDATE_GAME = "update games set name = ?, price = ?, time_to_play = ?, " +
-            "player_number = ?, rating = ?, description = ?, language = ?, publishing_house_id = ? where id = ?";
+            "player_number = ?, rating = ?, description = ?, language = ?, publishing_house_id = ?, image = ? where id = ?";
     private static final String DELETE_GAME = "delete from games where id = ?";
+    private static final String SET_CATEGORIES = "insert into games_categories (game_id, category_id) values (?, ?)";
+    private static final String GET_CATEGORIES = "select c.name from categories c inner join games_categories gc " +
+            "on c.id = gc.category_id where gc.game_id = ?";
 
     public List<Game> getByName(String name) {
         List<Game> games = new ArrayList<>();
@@ -66,14 +71,15 @@ public class GameDao implements GenericDao <Game> {
     }
 
     public Game getById(long id) {
-        Game game = null;
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_BY_ID)){
 
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
-            if(resultSet.next()){
-                game = convertToGame(resultSet);
+            if (resultSet.next()){
+                Game game = convertToGame(resultSet);
+                setCategoriesToGame(connection, resultSet, game);
+                return game;
             }
 
         }catch (SQLException e) {
@@ -81,7 +87,7 @@ public class GameDao implements GenericDao <Game> {
             e.printStackTrace();
         }
 
-        return game;
+        return null;
     }
 
     @Override
@@ -112,7 +118,16 @@ public class GameDao implements GenericDao <Game> {
             convertToStatement(model, preparedStatement);
 
             preparedStatement.execute();
-
+            Game game = getByName(model.getName()).get(0);
+            if (model.getCategories() != null && !model.getCategories().isEmpty()) {
+                for (Category category : model.getCategories()){
+                    try(PreparedStatement preparedStatement1 = connection.prepareStatement(SET_CATEGORIES)){
+                        preparedStatement1.setLong(1, game.getId());
+                        preparedStatement1.setLong(2, category.getId());
+                        preparedStatement1.execute();
+                    }
+                }
+            }
         }catch (SQLException e){
             logger.error("Issue with adding new game to database");
             e.printStackTrace();
@@ -125,7 +140,7 @@ public class GameDao implements GenericDao <Game> {
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_GAME)){
             convertToStatement(model, preparedStatement);
 
-            preparedStatement.setLong(9, model.getId());
+            preparedStatement.setLong(10, model.getId());
 
             preparedStatement.execute();
 
@@ -152,32 +167,17 @@ public class GameDao implements GenericDao <Game> {
     private void convertToStatement(Game model, PreparedStatement preparedStatement) throws SQLException {
         preparedStatement.setString(1, model.getName());
         preparedStatement.setDouble(2, model.getPrice());
-        if (model.getTimeToPlay().equals("")) {
-            preparedStatement.setString(3, null);
-        }else {
-            preparedStatement.setString(3, model.getTimeToPlay());
-        }
-        if (model.getPlayerNumber().equals("")) {
-            preparedStatement.setString(4, null);
-        }else {
-            preparedStatement.setString(4, model.getPlayerNumber());
-        }
-            preparedStatement.setDouble(5, model.getRating());
-        if (model.getDescription().equals("")) {
-            preparedStatement.setString(6, null);
-        }else {
-            preparedStatement.setString(3, model.getDescription());
-        }
-        if (model.getLanguage().equals("")) {
-            preparedStatement.setString(7, null);
-        }else {
-            preparedStatement.setString(3, model.getLanguage());
-        }
+        preparedStatement.setString(3, model.getTimeToPlay().isEmpty() ? null : model.getTimeToPlay());
+        preparedStatement.setString(4, model.getPlayerNumber().isEmpty() ? null : model.getPlayerNumber());
+        preparedStatement.setDouble(5, model.getRating());
+        preparedStatement.setString(6, model.getDescription().isEmpty() ? null : model.getDescription());
+        preparedStatement.setString(7, model.getLanguage().isEmpty() ? null : model.getLanguage());
         if (model.getPublishingHouse() == null) {
             preparedStatement.setNull(8, Types.BIGINT);
         } else {
             preparedStatement.setLong(8, model.getPublishingHouse().getId());
         }
+        preparedStatement.setString(9, model.getImage());
     }
 
     private Game convertToGame(ResultSet resultSet) throws SQLException {
@@ -194,6 +194,21 @@ public class GameDao implements GenericDao <Game> {
         if(house != null) {
             game.setPublishingHouse(publishingHouseDao.getById(resultSet.getLong(9)));
         }
+        game.setImage(resultSet.getString(10));
         return game;
+    }
+
+    private void setCategoriesToGame(Connection connection, ResultSet resultSet, Game game) throws SQLException {
+        try(PreparedStatement preparedStatement1 = connection.prepareStatement(GET_CATEGORIES)){
+            preparedStatement1.setLong(1, game.getId());
+            ResultSet resultSet1 = preparedStatement1.executeQuery();
+            List<Category> categories = new ArrayList<>();
+            while (resultSet1.next()){
+                categories.add(categoryDao.getByName(resultSet1.getString("name")));
+            }
+            if (!categories.isEmpty()){
+                game.setCategories(categories);
+            }
+        }
     }
 }

@@ -37,6 +37,7 @@ public class RegistrationServlet extends HttpServlet {
         user.setUserRole(UserRole.USER);
         String repeatPassword = req.getParameter("repeatPassword");
         try {
+
             userService.add(user, repeatPassword);
             RequestDispatcher requestDispatcher = req.getRequestDispatcher("jsp/homepage.jsp");
             requestDispatcher.forward(req, resp);

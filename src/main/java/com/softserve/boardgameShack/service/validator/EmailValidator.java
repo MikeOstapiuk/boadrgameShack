@@ -18,11 +18,10 @@ public class EmailValidator {
         }
     }
 
-    public void isExist(String email){
+    public void exists(String email) throws IllegalArgumentException{
         if (userDao.getByEmail(email) != null){
             throw new IllegalArgumentException("This mail is already registered. Please type another.");
         }
     }
-
 
 }
